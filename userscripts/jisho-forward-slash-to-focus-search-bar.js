@@ -1,0 +1,24 @@
+// ==UserScript==
+// @name         Jisho.org forward slash to focus search bar
+// @namespace    https://github.com/sahlaysta/
+// @version      0.1
+// @description  Focuses the search bar when forward slash is pressed, like on most sites
+// @author       sahlaysta
+// @match        https://jisho.org/*
+// @icon         https://avatars.githubusercontent.com/u/12574115?s=200&v=4
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+    const searchBar = document.querySelector('#keyword');
+    const forwardSlashKeyCode = 191;
+    document.addEventListener('keydown', event => {
+       if (!event.altKey && !event.ctrlKey && !event.isComposing && document.activeElement !== searchBar && event.keyCode === forwardSlashKeyCode) {
+           const selectionIndex = searchBar.value.length;
+           searchBar.focus();
+           searchBar.setSelectionRange(selectionIndex, selectionIndex);
+           event.preventDefault();
+       }
+    });
+})();
