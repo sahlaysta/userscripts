@@ -7,6 +7,7 @@
 // @match        https://jisho.org/*
 // @icon         https://avatars.githubusercontent.com/u/12574115?s=200&v=4
 // @grant        none
+// @license      MIT
 // ==/UserScript==
 
 (function() {
