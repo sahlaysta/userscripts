@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Animelon shortcuts
 // @namespace    https://github.com/sahlaysta/
-// @version      0.1
+// @version      0.2
 // @description  Adds several shortcuts to Animelon
 // @author       sahlaysta
 // @match        https://*.animelon.com/*
@@ -14,12 +14,13 @@
     'use strict';
 
     //adds a shortcut operation
-    function addShortcutFunction(keyCode, func) {
+    function addShortcutFunction(keyCodes, shortcutFn) {
         document.addEventListener('keydown', event => {
             if (!event.altKey && !event.ctrlKey && !event.isComposing
                 && !/^(?:input|textarea|select|button)$/i.test(event.target.tagName)
-                && event.keyCode === keyCode) {
-                func();
+                && keyCodes.includes(event.keyCode)) {
+                shortcutFn();
+                event.preventDefault();
             }
         });
     }
@@ -29,24 +30,33 @@
         return window.angular.element(document.getElementById('video-player-container')).scope();
     }
 
-    // K to pause/unpause
-    addShortcutFunction(75, () => {
+    // Spacebar and K to pause/unpause
+    addShortcutFunction([32, 75], () => {
         const ngCtrl = getVideoController();
         ngCtrl.playerValues.triggers.play(!(ngCtrl.playerValues.playing));
     });
 
     // M to mute/unmute
-    addShortcutFunction(77, () => {
+    addShortcutFunction([77], () => {
         const ngCtrl = getVideoController();
         ngCtrl.playerValues.triggers.volume(ngCtrl.playerValues.storage.volume === 0 ? 1 : 0);
     });
 
-    // P key to scroll through "Dialogue", "Translation History", and "Tests & Exercises"
-    const panelTypes = ["Dialogue", "Translation History", "Tests & Exercises"];
-    addShortcutFunction(80, () => {
+    // P to show/unshow the Discord panel
+    addShortcutFunction([80], () => {
+        document.getElementsByClassName('discordButton')[0].click();
+    });
+
+    // J to jump to previous dialogue
+    addShortcutFunction([74], () => {
         const ngCtrl = getVideoController();
-        const currentPanelType = ngCtrl.playerValues.storage.sidePanel.panelType;
-        ngCtrl.playerValues.sidePanel.changePanel(panelTypes[(1 + (panelTypes.findIndex((elem) => elem === currentPanelType))) % panelTypes.length]);
+        ngCtrl.playerValues.triggers.backward();
+    });
+
+    // L to jump to next dialogue
+    addShortcutFunction([76], () => {
+        const ngCtrl = getVideoController();
+        ngCtrl.playerValues.triggers.forward();
     });
 
 })();
