@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reverso Context forward slash to focus search bar
 // @namespace    https://github.com/sahlaysta/
-// @version      0.1
+// @version      0.2
 // @description  Focuses the search bar when forward slash is pressed, like on most sites
 // @author       sahlaysta
 // @match        https://context.reverso.net/*
@@ -9,16 +9,14 @@
 // @grant        none
 // @license      MIT
 // ==/UserScript==
-
+ 
 (function() {
     'use strict';
     const searchBar = document.querySelector('#search-input').firstElementChild;
-    const forwardSlashKeyCode = 191;
     document.addEventListener('keydown', event => {
-       if (!event.altKey && !event.ctrlKey && !event.isComposing && document.activeElement !== searchBar && event.keyCode === forwardSlashKeyCode) {
-           const selectionIndex = searchBar.value.length;
+       if (!event.altKey && !event.ctrlKey && !event.isComposing && document.activeElement !== searchBar && event.key === '/') {
            searchBar.focus();
-           searchBar.setSelectionRange(selectionIndex, selectionIndex);
+           searchBar.setSelectionRange(searchBar.value.length, searchBar.value.length);
            event.preventDefault();
        }
     });
